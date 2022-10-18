@@ -12,8 +12,12 @@
 
 #include "../includes/pipex.h"
 
-/* Function that will look for the path line inside the environment, will
- split and test each command path and then return the right one. */
+void	print_error(void)
+{
+	perror("\033[31mError");
+	exit(EXIT_FAILURE);
+}
+
 char	*find_path(char *cmd, char **envp)
 {
 	char	**paths;
@@ -43,16 +47,7 @@ char	*find_path(char *cmd, char **envp)
 	return (0);
 }
 
-/* A simple error displaying function. */
-void	error(void)
-{
-	perror("\033[31mError");
-	exit(EXIT_FAILURE);
-}
-
-/* Function that take the command and send it to find_path
- before executing it. */
-void	execute(char *argv, char **envp)
+void	exe_cmd(char *argv, char **envp)
 {
 	char	**cmd;
 	int 	i;
@@ -66,36 +61,8 @@ void	execute(char *argv, char **envp)
 		while (cmd[++i])
 			free(cmd[i]);
 		free(cmd);
-		error();
+		print_error();
 	}
 	if (execve(path, cmd, envp) == -1)
-		error();
-}
-
-/* Function that will read input from the terminal and return line. */
-int	get_next_line(char **line)
-{
-	char	*buffer;
-	int		i;
-	int		r;
-	char	c;
-
-	i = 0;
-	r = 0;
-	buffer = (char *)malloc(10000);
-	if (!buffer)
-		return (-1);
-	r = read(0, &c, 1);
-	while (r && c != '\n' && c != '\0')
-	{
-		if (c != '\n' && c != '\0')
-			buffer[i] = c;
-		i++;
-		r = read(0, &c, 1);
-	}
-	buffer[i] = '\n';
-	buffer[++i] = '\0';
-	*line = buffer;
-	free(buffer);
-	return (r);
+		print_error();
 }

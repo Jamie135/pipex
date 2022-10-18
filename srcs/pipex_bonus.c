@@ -12,24 +12,21 @@
 
 #include "../includes/pipex.h"
 
-/* Child process that create a fork and a pipe, put the output inside a pipe
- and then close with the exec function. The main process will change his stdin
- for the pipe file descriptor. */
 void	child_process(char *argv, char **envp)
 {
 	pid_t	pid;
 	int		fd[2];
 
 	if (pipe(fd) == -1)
-		error();
+		print_error();
 	pid = fork();
 	if (pid == -1)
-		error();
+		print_error();
 	if (pid == 0)
 	{
 		close(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
-		execute(argv, envp);
+		exe_cmd(argv, envp);
 	}
 	else
 	{
@@ -39,9 +36,6 @@ void	child_process(char *argv, char **envp)
 	}
 }
 
-/* Function who make a child process that will read from the stdin with
- get_next_line until it find the limiter word and then put the output inside a
- pipe. The main process will change his stdin for the pipe file descriptor. */
 void	here_doc(char *limiter, int argc)
 {
 	pid_t	reader;
@@ -49,9 +43,9 @@ void	here_doc(char *limiter, int argc)
 	char	*line;
 
 	if (argc < 6)
-		usage();
+		arg_error();
 	if (pipe(fd) == -1)
-		error();
+		print_error();
 	reader = fork();
 	if (reader == 0)
 	{
@@ -71,9 +65,6 @@ void	here_doc(char *limiter, int argc)
 	}
 }
 
-/* Main function that run the childs process with the right file descriptor
- or display an error message if arguments are wrong. It will run here_doc
- function if the "here_doc" string is find in argv[1] */
 int	main(int argc, char **argv, char **envp)
 {
 	int	i;
@@ -98,7 +89,7 @@ int	main(int argc, char **argv, char **envp)
 		while (i < argc - 2)
 			child_process(argv[i++], envp);
 		dup2(fileout, STDOUT_FILENO);
-		execute(argv[argc - 2], envp);
+		exe_cmd(argv[argc - 2], envp);
 	}
-	usage();
+	arg_error();
 }

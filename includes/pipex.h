@@ -21,14 +21,12 @@
 # include <fcntl.h>
 # include "../libft/libft.h"
 
-/* Mandatory functions */
-void	error(void);
+void	print_error(void);
 char	*find_path(char *cmd, char **envp);
-int		get_next_line(char **line);
-void	execute(char *argv, char **envp);
+void	exe_cmd(char *argv, char **envp);
 
-/* Bonus functions */
+void	arg_error(void);
 int		open_file(char *argv, int i);
-void	usage(void);
+int		get_next_line(char **line);
 
 #endif
