@@ -50,13 +50,13 @@ char	*find_path(char *cmd, char **envp)
 void	exe_cmd(char *argv, char **envp)
 {
 	char	**cmd;
-	int 	i;
+	int		i;
 	char	*path;
-	
+
 	i = -1;
 	cmd = ft_split(argv, ' ');
 	path = find_path(cmd[0], envp);
-	if (!path)	
+	if (!path)
 	{
 		while (cmd[++i])
 			free(cmd[i]);
