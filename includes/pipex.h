@@ -22,6 +22,7 @@
 # include "../libft/libft.h"
 
 void	print_error(void);
+void	free_tabs(char **tab);
 char	*find_path(char *cmd, char **envp);
 void	exe_cmd(char *argv, char **envp);
 
