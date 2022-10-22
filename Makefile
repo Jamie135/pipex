@@ -25,8 +25,8 @@ SRCS = 	srcs/pipex.c\
 OBJS 	= ${SRCS:.c=.o}
 
 SRCS_BONUS = 	srcs_bonus/pipex_bonus.c\
-				srcs_bonus/utils.c\
-				srcs_bonus/utils_bonus.c\
+				srcs_bonus/utils1_bonus.c\
+				srcs_bonus/utils2_bonus.c\
 				libft/libft.a
 
 OBJS_BONUS	= ${SRCS_BONUS:.c=.o}
