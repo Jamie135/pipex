@@ -39,10 +39,10 @@ bonus:		${OBJS} ${OBJS_B}
 					@ar rc ${NAME} ${OBJS} ${OBJS_B}
 
 clean:
-					@rm -f ${OBJS} ${OBJS_B}
+					@rm -rf ${OBJS} ${OBJS_B} libft.a
 
 fclean: 	clean
-					@rm -f $(NAME)
+					@rm -rf $(NAME)
 
 re:			fclean all
 

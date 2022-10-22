@@ -19,24 +19,25 @@ CFLAGS = -Werror -Wall -Wextra -g
 RM = rm -rf
 
 SRCS = 	srcs/pipex.c\
-		srcs/utils.c\
-		libft/libft.a
+		srcs/utils.c
 
 OBJS 	= ${SRCS:.c=.o}
 
 SRCS_BONUS = 	srcs_bonus/pipex_bonus.c\
 				srcs_bonus/utils1_bonus.c\
-				srcs_bonus/utils2_bonus.c\
-				libft/libft.a
+				srcs_bonus/utils2_bonus.c
 
 OBJS_BONUS	= ${SRCS_BONUS:.c=.o}
 
-
 all :	$(NAME)
 
-$(NAME) :
+$(NAME) :	$(OBJS)
 	make re -C ./libft
-	gcc $(CFLAGS) $(SRCS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) -Llibft -lft -o $(NAME)
+
+bonus :	$(OBJS_BONUS)
+	make re -C ./libft
+	$(CC) $(CFLAGS) $(OBJS_BONUS) -Llibft -lft -o $(NAME)
 
 clean :
 	make clean -C ./libft
@@ -48,7 +49,3 @@ fclean : clean
 	$(RM) $(NAME)
 
 re : fclean all
-
-bonus :
-	make re -C ./libft
-	gcc $(CFLAGS) $(SRCS_BONUS) -o $(NAME)
