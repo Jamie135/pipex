@@ -12,6 +12,26 @@
 
 #include "pipex.h"
 
+void	exe_cmd(char *argv, char **envp)
+{
+	char	**cmd;
+	char	*path;
+
+	cmd = ft_split(argv, ' ');
+	path = find_path(cmd[0], envp);
+	if (!path)
+	{
+		free_tabs(cmd);
+		print_error();
+	}
+	if (execve(path, cmd, envp) == -1)
+	{
+		free(path);
+		free_tabs(cmd);
+		print_error();
+	}
+}
+
 void	child_process(char **argv, char **envp, int *fd)
 {
 	int		filein;

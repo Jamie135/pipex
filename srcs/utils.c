@@ -59,23 +59,3 @@ char	*find_path(char *cmd, char **envp)
 	free_tabs(paths);
 	return (0);
 }
-
-void	exe_cmd(char *argv, char **envp)
-{
-	char	**cmd;
-	char	*path;
-
-	cmd = ft_split(argv, ' ');
-	path = find_path(cmd[0], envp);
-	if (!path)
-	{
-		free_tabs(cmd);
-		print_error();
-	}
-	if (execve(path, cmd, envp) == -1)
-	{
-		free(path);
-		free_tabs(cmd);
-		print_error();
-	}
-}

@@ -5,91 +5,115 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: pbureera <pbureera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/18 23:03:46 by pbureera          #+#    #+#             */
-/*   Updated: 2022/10/18 23:03:46 by pbureera         ###   ########.fr       */
+/*   Created: 2022/10/22 18:10:07 by pbureera          #+#    #+#             */
+/*   Updated: 2022/10/22 18:10:07 by pbureera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-void	child_process(char *argv, char **envp)
+void	exe_cmd(char *cmd, char **env)
 {
-	pid_t	pid;
-	int		fd[2];
+	char	**s_cmd;
+	char	*path;
 
-	if (pipe(fd) == -1)
-		print_error();
-	pid = fork();
-	if (pid == -1)
-		print_error();
-	if (pid == 0)
+	s_cmd = ft_split(cmd, ' ');
+	path = find_path(s_cmd[0], env);
+	if (execve(path, s_cmd, env) == -1)
 	{
-		close(fd[0]);
-		dup2(fd[1], STDOUT_FILENO);
-		exe_cmd(argv, envp);
-	}
-	else
-	{
-		close(fd[1]);
-		dup2(fd[0], STDIN_FILENO);
-		waitpid(pid, NULL, 0);
+		ft_putstr_fd("pipex: command not found: ", 2);
+		ft_putendl_fd(s_cmd[0], 2);
+		free_tabs(s_cmd);
+		exit(0);
 	}
 }
 
-void	here_doc(char *limiter, int argc)
+void	here_doc_put_in(char **av, int *p_fd)
 {
-	pid_t	reader;
-	int		fd[2];
-	char	*line;
+	char	*ret;
 
-	if (argc < 6)
-		arg_error();
-	if (pipe(fd) == -1)
-		print_error();
-	reader = fork();
-	if (reader == 0)
+	close(p_fd[0]);
+	while (1)
 	{
-		close(fd[0]);
-		while (get_next_line(&line))
+		ret = get_next_line(0);
+		if (ft_strncmp(ret, av[2], ft_strlen(av[2])) == 0)
 		{
-			if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0)
-				exit(EXIT_SUCCESS);
-			write(fd[1], line, ft_strlen(line));
+			free(ret);
+			exit(0);
 		}
+		ft_putstr_fd(ret, p_fd[1]);
+		free(ret);
 	}
+}
+
+void	here_doc(char **av)
+{
+	int		p_fd[2];
+	pid_t	pid;
+
+	if (pipe(p_fd) == -1)
+		exit(0);
+	pid = fork();
+	if (pid == -1)
+		exit(0);
+	if (!pid)
+		here_doc_put_in(av, p_fd);
 	else
 	{
-		close(fd[1]);
-		dup2(fd[0], STDIN_FILENO);
+		close(p_fd[1]);
+		dup2(p_fd[0], 0);
 		wait(NULL);
 	}
 }
 
-int	main(int argc, char **argv, char **envp)
+void	do_pipe(char *cmd, char **env)
 {
-	int	i;
-	int	filein;
-	int	fileout;
+	pid_t	pid;
+	int		p_fd[2];
 
-	if (argc >= 5)
+	if (pipe(p_fd) == -1)
+		exit(0);
+	pid = fork();
+	if (pid == -1)
+		exit(0);
+	if (!pid)
 	{
-		if (ft_strncmp(argv[1], "here_doc", 8) == 0)
-		{
-			i = 3;
-			fileout = open_file(argv[argc - 1], 0);
-			here_doc(argv[2], argc);
-		}
-		else
-		{
-			i = 2;
-			fileout = open_file(argv[argc - 1], 1);
-			filein = open_file(argv[1], 2);
-			dup2(filein, STDIN_FILENO);
-		}
-		while (i < argc - 2)
-			child_process(argv[i++], envp);
-		dup2(fileout, STDOUT_FILENO);
-		exe_cmd(argv[argc - 2], envp);
+		close(p_fd[0]);
+		dup2(p_fd[1], 1);
+		exe_cmd(cmd, env);
 	}
-	arg_error();
+	else
+	{
+		close(p_fd[1]);
+		dup2(p_fd[0], 0);
+	}
+}
+
+int	main(int ac, char **av, char **env)
+{
+	int		i;
+	int		fd_in;
+	int		fd_out;
+
+	if (ac < 5)
+		arg_error();
+	if (ft_strcmp(av[1], "here_doc") == 0)
+	{
+		if (ac < 6)
+			arg_error();
+		i = 3;
+		fd_out = open_file(av[ac - 1], 2);
+		here_doc(av);
+	}
+	else
+	{
+		i = 2;
+		fd_in = open_file(av[1], 0);
+		fd_out = open_file(av[ac - 1], 1);
+		dup2(fd_in, 0);
+	}
+	while (i < ac - 2)
+		do_pipe(av[i++], env);
+	dup2(fd_out, 1);
+	exe_cmd(av[ac - 2], env);
 }

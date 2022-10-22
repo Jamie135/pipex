@@ -1,33 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_bonus.h                                      :+:      :+:    :+:   */
+/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pbureera <pbureera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/22 16:04:57 by pbureera          #+#    #+#             */
-/*   Updated: 2022/10/22 18:42:34 by pbureera         ###   ########.fr       */
+/*   Created: 2022/07/14 14:27:29 by pbureera          #+#    #+#             */
+/*   Updated: 2022/07/14 14:56:12 by pbureera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_BONUS_H
-# define PIPEX_BONUS_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
-# include "../libft/libft.h"
-# include <unistd.h>
-# include <stdio.h>
-# include <sys/types.h>
-# include <sys/wait.h>
-# include <sys/types.h>
-# include <sys/stat.h>
-# include <fcntl.h>
 # include <stdlib.h>
+# include <unistd.h>
 
-void	arg_error(void);
-void	free_tabs(char **tab);
-int		open_file(char *argv, int i);
-char	*find_env(char *name, char **env);
-char	*find_path(char *cmd, char **env);
-void	exe_cmd(char *cmd, char **env);
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 50
+# endif
+
+size_t			ft_strlen(char *str);
+char			*ft_strchr(char *s, int c);
+char			*ft_strjoin(char *s1, char *s2);
+char			*get_next_line(int fd);
+char			*get_read_to_stash(int fd, char *stash);
+char			*get_line(char *stash);
+char			*get_stash(char *stash);
 
 #endif
