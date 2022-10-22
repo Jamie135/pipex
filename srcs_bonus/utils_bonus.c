@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex.h"
+#include "pipex_bonus.h"
 
 void	arg_error(void)
 {

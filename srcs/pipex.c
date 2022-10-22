@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex.h"
+#include "pipex.h"
 
 void	child_process(char **argv, char **envp, int *fd)
 {
