@@ -6,12 +6,12 @@
 /*   By: pbureera <pbureera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 16:04:57 by pbureera          #+#    #+#             */
-/*   Updated: 2022/10/22 16:05:14 by pbureera         ###   ########.fr       */
+/*   Updated: 2022/10/22 16:19:53 by pbureera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef PIPEX_BONUS_H
+# define PIPEX_BONUS_H
 
 # include <stdlib.h>
 # include <unistd.h>
