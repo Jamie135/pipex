@@ -28,40 +28,40 @@ void	exe_cmd(char *cmd, char **env)
 	}
 }
 
-void	here_doc_put_in(char **av, int *p_fd)
+void	here_doc_input(char **argv, int *fd)
 {
-	char	*ret;
+	char	*line;
 
-	close(p_fd[0]);
+	close(fd[0]);
 	while (1)
 	{
-		ret = get_next_line(0);
-		if (ft_strncmp(ret, av[2], ft_strlen(av[2])) == 0)
+		line = get_next_line(0);
+		if (ft_strncmp(line, argv[2], ft_strlen(argv[2])) == 0)
 		{
-			free(ret);
+			free(line);
 			exit(0);
 		}
-		ft_putstr_fd(ret, p_fd[1]);
-		free(ret);
+		ft_putstr_fd(line, fd[1]);
+		free(line);
 	}
 }
 
-void	here_doc(char **av)
+void	here_doc(char **argv)
 {
-	int		p_fd[2];
+	int		fd[2];
 	pid_t	pid;
 
-	if (pipe(p_fd) == -1)
+	if (pipe(fd) == -1)
 		exit(0);
 	pid = fork();
 	if (pid == -1)
 		exit(0);
 	if (!pid)
-		here_doc_put_in(av, p_fd);
+		here_doc_input(argv, fd);
 	else
 	{
-		close(p_fd[1]);
-		dup2(p_fd[0], 0);
+		close(fd[1]);
+		dup2(fd[0], 0);
 		wait(NULL);
 	}
 }
@@ -69,23 +69,23 @@ void	here_doc(char **av)
 void	do_pipe(char *cmd, char **env)
 {
 	pid_t	pid;
-	int		p_fd[2];
+	int		fd[2];
 
-	if (pipe(p_fd) == -1)
+	if (pipe(fd) == -1)
 		exit(0);
 	pid = fork();
 	if (pid == -1)
 		exit(0);
 	if (!pid)
 	{
-		close(p_fd[0]);
-		dup2(p_fd[1], 1);
+		close(fd[0]);
+		dup2(fd[1], 1);
 		exe_cmd(cmd, env);
 	}
 	else
 	{
-		close(p_fd[1]);
-		dup2(p_fd[0], 0);
+		close(fd[1]);
+		dup2(fd[0], 0);
 	}
 }
 
