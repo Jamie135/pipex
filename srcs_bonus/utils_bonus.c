@@ -17,7 +17,7 @@ void	arg_error(void)
 	ft_putstr_fd("Error: Invalid number of arguments\n", 2);
 	ft_putstr_fd("Ex: ./pipex <file1> <cmd1> <cmd2> <...> <file2>\n", 1);
 	ft_putstr_fd("    ./pipex \"here_doc\" <LIMITER> ", 1);
-	ft_putstr_fd("<cmd> <cmd1> <...> <file>\n", 1);
+	ft_putstr_fd("<cmd> <cmd1> <file>\n", 1);
 	exit(EXIT_SUCCESS);
 }
 
