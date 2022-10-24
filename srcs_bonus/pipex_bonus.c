@@ -56,7 +56,7 @@ void	here_doc(char **argv)
 	pid = fork();
 	if (pid == -1)
 		exit(0);
-	if (!pid)
+	if (pid == 0)
 		here_doc_input(argv, fd);
 	else
 	{
@@ -76,7 +76,7 @@ void	do_pipe(char *cmd, char **env)
 	pid = fork();
 	if (pid == -1)
 		exit(0);
-	if (!pid)
+	if (pid == 0)
 	{
 		close(fd[0]);
 		dup2(fd[1], 1);
@@ -89,31 +89,31 @@ void	do_pipe(char *cmd, char **env)
 	}
 }
 
-int	main(int ac, char **av, char **env)
+int	main(int argc, char **argv, char **env)
 {
 	int		i;
 	int		fd_in;
 	int		fd_out;
 
-	if (ac < 5)
+	if (argc < 5)
 		arg_error();
-	if (ft_strcmp(av[1], "here_doc") == 0)
+	if (ft_strcmp(argv[1], "here_doc") == 0)
 	{
-		if (ac < 6)
+		if (argc < 6)
 			arg_error();
 		i = 3;
-		fd_out = open_file(av[ac - 1], 2);
-		here_doc(av);
+		fd_out = open_file(argv[argc - 1], 2);
+		here_doc(argv);
 	}
 	else
 	{
 		i = 2;
-		fd_in = open_file(av[1], 0);
-		fd_out = open_file(av[ac - 1], 1);
+		fd_in = open_file(argv[1], 0);
+		fd_out = open_file(argv[argc - 1], 1);
 		dup2(fd_in, 0);
 	}
-	while (i < ac - 2)
-		do_pipe(av[i++], env);
+	while (i < argc - 2)
+		do_pipe(argv[i++], env);
 	dup2(fd_out, 1);
-	exe_cmd(av[ac - 2], env);
+	exe_cmd(argv[argc - 2], env);
 }
