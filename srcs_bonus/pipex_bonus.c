@@ -12,108 +12,83 @@
 
 #include "pipex_bonus.h"
 
-void	exe_cmd(char *cmd, char **env)
+void	here_doc(char *limiter, int argc)
 {
-	char	**s_cmd;
-	char	*path;
-
-	s_cmd = ft_split(cmd, ' ');
-	path = find_path(s_cmd[0], env);
-	if (execve(path, s_cmd, env) == -1)
-	{
-		ft_putstr_fd("pipex: command not found: ", 2);
-		ft_putendl_fd(s_cmd[0], 2);
-		free_tabs(s_cmd);
-		exit(0);
-	}
-}
-
-void	here_doc_input(char **argv, int *fd)
-{
+	pid_t	file;
+	int		fd[2];
 	char	*line;
 
-	close(fd[0]);
-	while (1)
-	{
-		line = get_next_line(0);
-		if (ft_strncmp(line, argv[2], ft_strlen(argv[2])) == 0)
-		{
-			free(line);
-			exit(0);
-		}
-		ft_putstr_fd(line, 1);
-		free(line);
-	}
-}
-
-void	here_doc(char **argv)
-{
-	int		fd[2];
-	pid_t	pid1;
-
+	if (argc < 6)
+		arg_error();
 	if (pipe(fd) == -1)
-		exit(0);
-	pid1 = fork();
-	if (pid1 == -1)
-		exit(0);
-	if (pid1 == 0)
-		here_doc_input(argv, fd);
+		print_error("Error");
+	file = fork();
+	if (file == 0)
+	{
+		close(fd[0]);
+		while (get_next_line(&line))
+		{
+			if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0)
+				exit(EXIT_SUCCESS);
+			write(fd[1], line, ft_strlen(line));
+		}
+	}
 	else
 	{
 		close(fd[1]);
-		dup2(fd[0], 0);
+		dup2(fd[0], STDIN_FILENO);
 		wait(NULL);
 	}
 }
 
-void	mult_cmd(char *cmd, char **env)
+void	do_process(char *argv, char **envp)
 {
-	pid_t	pid1;
 	int		fd[2];
+	pid_t	pid1;
 
 	if (pipe(fd) == -1)
-		exit(0);
+		print_error("Error");
 	pid1 = fork();
 	if (pid1 == -1)
-		exit(0);
+		print_error("Error");
 	if (pid1 == 0)
 	{
+		dup2(fd[1], STDOUT_FILENO);
 		close(fd[0]);
-		dup2(fd[1], 1);
-		exe_cmd(cmd, env);
+		exe_cmd(argv, envp);
 	}
 	else
 	{
+		dup2(fd[0], STDIN_FILENO);
 		close(fd[1]);
-		dup2(fd[0], 0);
 	}
 }
 
-int	main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **envp)
 {
-	int		i;
-	int		fd_in;
-	int		fd_out;
+	int	i;
+	int	filein;
+	int	fileout;
 
-	if (argc < 5)
-		arg_error();
-	if (ft_strcmp(argv[1], "here_doc") == 0)
+	if (argc >= 5)
 	{
-		if (argc < 6)
-			arg_error();
-		i = 3;
-		fd_out = open_file(argv[argc - 1], 2);
-		here_doc(argv);
+		if (ft_strncmp(argv[1], "here_doc", 8) == 0)
+		{
+			i = 3;
+			fileout = open_file(argv[argc - 1], 0);
+			here_doc(argv[2], argc);
+		}
+		else
+		{
+			i = 2;
+			fileout = open_file(argv[argc - 1], 1);
+			filein = open_file(argv[1], 2);
+			dup2(filein, STDIN_FILENO);
+		}
+		while (i < argc - 2)
+			do_process(argv[i++], envp);
+		dup2(fileout, STDOUT_FILENO);
+		exe_cmd(argv[argc - 2], envp);
 	}
-	else
-	{
-		i = 2;
-		fd_in = open_file(argv[1], 0);
-		fd_out = open_file(argv[argc - 1], 1);
-		dup2(fd_in, 0);
-	}
-	while (i < argc - 2)
-		mult_cmd(argv[i++], env);
-	dup2(fd_out, 1);
-	exe_cmd(argv[argc - 2], env);
+	arg_error();
 }

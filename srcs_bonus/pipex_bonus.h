@@ -10,25 +10,23 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_BONUS_H
-# define PIPEX_BONUS_H
+#ifndef PIPEX_H
+# define PIPEX_H
 
-# include "../libft/libft.h"
-# include <unistd.h>
-# include <stdio.h>
-# include <sys/types.h>
-# include <sys/wait.h>
-# include <sys/types.h>
-# include <sys/stat.h>
-# include <fcntl.h>
 # include <stdlib.h>
+# include <unistd.h>
+# include <string.h>
+# include <stdio.h>
+# include <sys/wait.h>
+# include <fcntl.h>
+# include "../libft/libft.h"
 
-void	arg_error(void);
+char	*find_path(char *cmd, char **envp);
+void	exe_cmd(char *argv, char **envp);
+int		get_next_line(char **line);
 void	print_error(char *err);
+void	arg_error(void);
 void	free_tabs(char **tab);
 int		open_file(char *argv, int i);
-char	*find_env(char *name, char **env);
-char	*find_path(char *cmd, char **env);
-void	exe_cmd(char *cmd, char **env);
 
 #endif
