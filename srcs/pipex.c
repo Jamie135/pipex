@@ -72,6 +72,7 @@ int	main(int argc, char **argv, char **envp)
 			print_error();
 		if (pid1 == 0)
 			child_process(argv, envp, fd);
+		waitpid(pid1, NULL, 0);
 		parent_process(argv, envp, fd);
 	}
 	else

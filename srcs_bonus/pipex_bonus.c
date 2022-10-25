@@ -49,14 +49,14 @@ void	here_doc_input(char **argv, int *fd)
 void	here_doc(char **argv)
 {
 	int		fd[2];
-	pid_t	pid;
+	pid_t	pid1;
 
 	if (pipe(fd) == -1)
 		exit(0);
-	pid = fork();
-	if (pid == -1)
+	pid1 = fork();
+	if (pid1 == -1)
 		exit(0);
-	if (pid == 0)
+	if (pid1 == 0)
 		here_doc_input(argv, fd);
 	else
 	{
@@ -66,17 +66,17 @@ void	here_doc(char **argv)
 	}
 }
 
-void	do_pipe(char *cmd, char **env)
+void	mult_cmd(char *cmd, char **env)
 {
-	pid_t	pid;
+	pid_t	pid1;
 	int		fd[2];
 
 	if (pipe(fd) == -1)
 		exit(0);
-	pid = fork();
-	if (pid == -1)
+	pid1 = fork();
+	if (pid1 == -1)
 		exit(0);
-	if (pid == 0)
+	if (pid1 == 0)
 	{
 		close(fd[0]);
 		dup2(fd[1], 1);
@@ -113,7 +113,7 @@ int	main(int argc, char **argv, char **env)
 		dup2(fd_in, 0);
 	}
 	while (i < argc - 2)
-		do_pipe(argv[i++], env);
+		mult_cmd(argv[i++], env);
 	dup2(fd_out, 1);
 	exe_cmd(argv[argc - 2], env);
 }
