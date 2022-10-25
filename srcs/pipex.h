@@ -17,11 +17,12 @@
 # include <unistd.h>
 # include <string.h>
 # include <stdio.h>
+# include <errno.h>
 # include <sys/wait.h>
 # include <fcntl.h>
 # include "../libft/libft.h"
 
-void	print_error(void);
+void	print_error(char *err);
 void	free_tabs(char **tab);
 char	*find_path(char *cmd, char **envp);
 void	exe_cmd(char *argv, char **envp);

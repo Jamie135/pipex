@@ -12,9 +12,9 @@
 
 #include "pipex.h"
 
-void	print_error(void)
+void	print_error(char *err)
 {
-	perror("\033[31mError");
+	perror(err);
 	exit(EXIT_FAILURE);
 }
 

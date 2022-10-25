@@ -22,13 +22,13 @@ void	exe_cmd(char *argv, char **envp)
 	if (!path)
 	{
 		free_tabs(cmd);
-		print_error();
+		print_error("Error");
 	}
 	if (execve(path, cmd, envp) == -1)
 	{
 		free(path);
 		free_tabs(cmd);
-		print_error();
+		print_error("Error");
 	}
 }
 
@@ -38,7 +38,7 @@ void	child_process(char **argv, char **envp, int *fd)
 
 	filein = open(argv[1], O_RDONLY, 0777);
 	if (filein == -1)
-		print_error();
+		print_error("Error");
 	dup2(fd[1], STDOUT_FILENO);
 	dup2(filein, STDIN_FILENO);
 	close(fd[0]);
@@ -51,7 +51,7 @@ void	parent_process(char **argv, char **envp, int *fd)
 
 	fileout = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (fileout == -1)
-		print_error();
+		print_error("Error");
 	dup2(fd[0], STDIN_FILENO);
 	dup2(fileout, STDOUT_FILENO);
 	close(fd[1]);
@@ -66,19 +66,18 @@ int	main(int argc, char **argv, char **envp)
 	if (argc == 5)
 	{
 		if (pipe(fd) == -1)
-			print_error();
+			print_error("Error");
 		pid1 = fork();
 		if (pid1 == -1)
-			print_error();
+			print_error("Error");
 		if (pid1 == 0)
 			child_process(argv, envp, fd);
-		waitpid(pid1, NULL, 0);
 		parent_process(argv, envp, fd);
 	}
 	else
 	{
-		ft_putstr_fd("Error: Invalid number of arguments\n", 2);
-		ft_putstr_fd("Ex: ./pipex <file1> <cmd1> <cmd2> <file2>\n", 1);
+		ft_putstr_fd("Error: Invalid arguments\n", 2);
+		ft_putstr_fd("Ex: ./pipex infile cmd1 cmd2 outfile\n", 1);
 	}
 	return (0);
 }

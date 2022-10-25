@@ -41,7 +41,7 @@ void	here_doc_input(char **argv, int *fd)
 			free(line);
 			exit(0);
 		}
-		ft_putstr_fd(line, fd[1]);
+		ft_putstr_fd(line, 1);
 		free(line);
 	}
 }

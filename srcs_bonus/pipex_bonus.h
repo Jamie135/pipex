@@ -6,7 +6,7 @@
 /*   By: pbureera <pbureera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 16:04:57 by pbureera          #+#    #+#             */
-/*   Updated: 2022/10/22 18:42:34 by pbureera         ###   ########.fr       */
+/*   Updated: 2022/10/25 17:12:11 by pbureera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <stdlib.h>
 
 void	arg_error(void);
+void	print_error(char *err);
 void	free_tabs(char **tab);
 int		open_file(char *argv, int i);
 char	*find_env(char *name, char **env);
