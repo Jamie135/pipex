@@ -22,36 +22,36 @@ void	exe_cmd(char *argv, char **envp)
 	if (!path)
 	{
 		free_tabs(cmd);
-		print_error("Error");
+		message_error(ERROR_CMD);
 	}
 	if (execve(path, cmd, envp) == -1)
 	{
 		free(path);
 		free_tabs(cmd);
-		print_error("Error");
+		message_error(ERROR_CMD);
 	}
 }
 
-void	child_process(char **argv, char **envp, int *fd)
+void	child1_process(char **argv, char **envp, int *fd)
 {
 	int		filein;
 
 	filein = open(argv[1], O_RDONLY, 0777);
 	if (filein == -1)
-		print_error("Error");
+		print_error(ERROR_INFILE);
 	dup2(fd[1], STDOUT_FILENO);
 	dup2(filein, STDIN_FILENO);
 	close(fd[0]);
 	exe_cmd(argv[2], envp);
 }
 
-void	parent_process(char **argv, char **envp, int *fd)
+void	child2_process(char **argv, char **envp, int *fd)
 {
 	int		fileout;
 
 	fileout = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (fileout == -1)
-		print_error("Error");
+		print_error(ERROR_OUTFILE);
 	dup2(fd[0], STDIN_FILENO);
 	dup2(fileout, STDOUT_FILENO);
 	close(fd[1]);
@@ -62,22 +62,28 @@ int	main(int argc, char **argv, char **envp)
 {
 	int		fd[2];
 	pid_t	pid1;
+	pid_t	pid2;
 
 	if (argc == 5)
 	{
 		if (pipe(fd) == -1)
-			print_error("Error");
+			print_error(ERROR_PIPE);
 		pid1 = fork();
 		if (pid1 == -1)
-			print_error("Error");
+			print_error("Fork");
 		if (pid1 == 0)
-			child_process(argv, envp, fd);
-		parent_process(argv, envp, fd);
+			child1_process(argv, envp, fd);
+		pid2 = fork();
+		if (pid2 == -1)
+			print_error("Fork");
+		if (pid2 == 0)
+			child2_process(argv, envp, fd);
+		close(fd[0]);
+		close(fd[1]);
+		waitpid(pid1, NULL, 0);
+		waitpid(pid2, NULL, 0);
 	}
 	else
-	{
-		ft_putstr_fd("Error: Invalid arguments\n", 2);
-		ft_putstr_fd("Ex: ./pipex infile cmd1 cmd2 outfile\n", 1);
-	}
+		message_error(ERROR_INPUT);
 	return (0);
 }

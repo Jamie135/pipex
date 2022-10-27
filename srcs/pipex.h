@@ -22,7 +22,15 @@
 # include <fcntl.h>
 # include "../libft/libft.h"
 
+# define ERROR_INFILE "Infile"
+# define ERROR_OUTFILE "Outfile"
+# define ERROR_INPUT "Invalid number of arguments.\nEx: ./pipex infile cmd1 cmd2 outfile\n"
+# define ERROR_PIPE "Pipe"
+# define ERROR_FORK "Fork"
+# define ERROR_CMD "Command not found\n"
+
 void	print_error(char *err);
+int		message_error(char *err);
 void	free_tabs(char **tab);
 char	*find_path(char *cmd, char **envp);
 void	exe_cmd(char *argv, char **envp);

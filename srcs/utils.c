@@ -18,6 +18,12 @@ void	print_error(char *err)
 	exit(EXIT_FAILURE);
 }
 
+int	message_error(char *err)
+{
+	write(2, err, ft_strlen(err));
+	return (1);
+}
+
 void	free_tabs(char **tab)
 {
 	size_t	i;

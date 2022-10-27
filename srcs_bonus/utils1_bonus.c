@@ -51,13 +51,13 @@ void	exe_cmd(char *argv, char **envp)
 	if (!path)	
 	{
 		free_tabs(cmd);
-		print_error("Error");
+		message_error(ERROR_CMD);
 	}
 	if (execve(path, cmd, envp) == -1)
 	{
 		free(path);
 		free_tabs(cmd);
-		print_error("Error");
+		message_error(ERROR_CMD);
 	}
 }
 

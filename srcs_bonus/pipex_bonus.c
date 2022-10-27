@@ -12,6 +12,24 @@
 
 #include "pipex_bonus.h"
 
+int	check_limiter(char *limiter, char *line)
+{
+	int	i;
+
+	i = 0;
+	if (ft_strlen(limiter) == ft_strlen(line) - 1)
+	{
+		while (line[i])
+		{
+			if (limiter[i] != line[i] && i > (int)ft_strlen(limiter))
+				return (0);
+			i++;
+		}
+		return (1);
+	}
+	return (0);
+}
+
 void	here_doc(char *limiter, int argc)
 {
 	pid_t	file;
@@ -19,17 +37,19 @@ void	here_doc(char *limiter, int argc)
 	char	*line;
 
 	if (argc < 6)
-		arg_error();
+		message_error(ERROR_INPUT);
 	if (pipe(fd) == -1)
-		print_error("Error");
+		print_error(ERROR_PIPE);
 	file = fork();
 	if (file == 0)
 	{
+		write(1, "> ", 2);
 		close(fd[0]);
 		while (get_next_line(&line))
 		{
-			if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0)
+			if (check_limiter(limiter, line))
 				exit(EXIT_SUCCESS);
+			write(1, "> ", 2);
 			write(fd[1], line, ft_strlen(line));
 		}
 	}
@@ -47,10 +67,10 @@ void	do_process(char *argv, char **envp)
 	pid_t	pid1;
 
 	if (pipe(fd) == -1)
-		print_error("Error");
+		print_error(ERROR_PIPE);
 	pid1 = fork();
 	if (pid1 == -1)
-		print_error("Error");
+		print_error(ERROR_FORK);
 	if (pid1 == 0)
 	{
 		dup2(fd[1], STDOUT_FILENO);
@@ -90,5 +110,5 @@ int	main(int argc, char **argv, char **envp)
 		dup2(fileout, STDOUT_FILENO);
 		exe_cmd(argv[argc - 2], envp);
 	}
-	arg_error();
+	message_error(ERROR_INPUT);
 }

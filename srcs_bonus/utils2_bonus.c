@@ -18,12 +18,10 @@ void	print_error(char *err)
 	exit(EXIT_FAILURE);
 }
 
-void	arg_error(void)
+int	message_error(char *err)
 {
-	ft_putstr_fd("Error: Invalid arguments\n", 2);
-	ft_putstr_fd("Ex: ./pipex infile cmd1 cmd2 ... outfile\n", 2);
-	ft_putstr_fd("    ./pipex here_doc LIMITER cmd cmd1 ... outfile\n", 2);
-	exit(EXIT_SUCCESS);
+	write(2, err, ft_strlen(err));
+	return (1);
 }
 
 void	free_tabs(char **tab)
@@ -45,12 +43,22 @@ int	open_file(char *argv, int i)
 
 	file = 0;
 	if (i == 0)
+	{
 		file = open(argv, O_WRONLY | O_CREAT | O_APPEND, 0777);
+		if (file == -1)
+			print_error(ERROR_OUTFILE);
+	}
 	else if (i == 1)
+	{
 		file = open(argv, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+		if (file == -1)
+			print_error(ERROR_OUTFILE);
+	}
 	else if (i == 2)
+	{
 		file = open(argv, O_RDONLY, 0777);
-	if (file == -1)
-		print_error("Error");
+		if (file == -1)
+			print_error(ERROR_INFILE);
+	}
 	return (file);
 }
