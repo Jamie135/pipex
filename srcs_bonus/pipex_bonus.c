@@ -30,6 +30,14 @@ int	check_limiter(char *limiter, char *line)
 	return (0);
 }
 
+void	here_doc_input(char *limiter, char *line, int fd)
+{
+	if (check_limiter(limiter, line))
+		exit(EXIT_SUCCESS);
+	write(1, "> ", 2);
+	write(fd, line, ft_strlen(line));
+}
+
 void	here_doc(char *limiter, int argc)
 {
 	pid_t	file;
@@ -46,12 +54,7 @@ void	here_doc(char *limiter, int argc)
 		write(1, "> ", 2);
 		close(fd[0]);
 		while (get_next_line(&line))
-		{
-			if (check_limiter(limiter, line))
-				exit(EXIT_SUCCESS);
-			write(1, "> ", 2);
-			write(fd[1], line, ft_strlen(line));
-		}
+			here_doc_input(limiter, line, fd[1]);
 	}
 	else
 	{

@@ -58,6 +58,14 @@ void	child2_process(char **argv, char **envp, int *fd)
 	exe_cmd(argv[3], envp);
 }
 
+void	close_wait(int fd1, int fd2, pid_t pid1, pid_t pid2)
+{
+	close(fd1);
+	close(fd2);
+	waitpid(pid1, NULL, 0);
+	waitpid(pid2, NULL, 0);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	int		fd[2];
@@ -78,10 +86,7 @@ int	main(int argc, char **argv, char **envp)
 			print_error("Fork");
 		if (pid2 == 0)
 			child2_process(argv, envp, fd);
-		close(fd[0]);
-		close(fd[1]);
-		waitpid(pid1, NULL, 0);
-		waitpid(pid2, NULL, 0);
+		close_wait(fd[0], fd[1], pid1, pid2);
 	}
 	else
 		message_error(ERROR_INPUT);

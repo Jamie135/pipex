@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_bonus.c                                      :+:      :+:    :+:   */
+/*   utils1_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pbureera <pbureera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 17:17:26 by pbureera          #+#    #+#             */
-/*   Updated: 2022/10/25 17:17:54 by pbureera         ###   ########.fr       */
+/*   Updated: 2022/10/28 12:27:23 by pbureera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	exe_cmd(char *argv, char **envp)
 
 	cmd = ft_split(argv, ' ');
 	path = find_path(cmd[0], envp);
-	if (!path)	
+	if (!path)
 	{
 		free_tabs(cmd);
 		message_error(ERROR_CMD);
