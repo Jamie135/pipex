@@ -30,6 +30,7 @@ Ex: ./pipex infile cmd1 cmd2 ... outfile\n\
 # define ERROR_FORK "Fork"
 # define ERROR_CMD "Command not found\n"
 
+char	**create_path(char **envp);
 char	*find_path(char *cmd, char **envp);
 void	exe_cmd(char *argv, char **envp);
 int		get_next_line(char **line);

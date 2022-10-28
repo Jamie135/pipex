@@ -12,6 +12,24 @@
 
 #include "pipex_bonus.h"
 
+char	**create_path(char **envp)
+{
+	char	**paths;
+	int		len;
+	int		i;
+
+	len = 0;
+	i = 0;
+	while (envp[len])
+		len++;
+	while (ft_strnstr(envp[i], "PATH", 4) == 0 && i < len - 1)
+		i++;
+	if (ft_strnstr(envp[i], "PATH", 4) == 0)
+		return(NULL);
+	paths = ft_split(envp[i] + 5, ':');
+	return(paths);
+}
+
 char	*find_path(char *cmd, char **envp)
 {
 	char	**paths;
@@ -19,10 +37,9 @@ char	*find_path(char *cmd, char **envp)
 	char	*exec;
 	int		i;
 
-	i = 0;
-	while (ft_strnstr(envp[i], "PATH", 4) == 0)
-		i++;
-	paths = ft_split(envp[i] + 5, ':');
+	paths = create_path(envp);
+	if (!paths)
+		return (0);
 	i = 0;
 	while (paths[i])
 	{
