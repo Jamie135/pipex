@@ -6,7 +6,7 @@
 /*   By: pbureera <pbureera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 16:04:57 by pbureera          #+#    #+#             */
-/*   Updated: 2022/10/25 17:12:11 by pbureera         ###   ########.fr       */
+/*   Updated: 2022/10/28 11:49:58 by pbureera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 
 # define ERROR_INFILE "Infile"
 # define ERROR_OUTFILE "Outfile"
-# define ERROR_INPUT "Invalid number of arguments.\nEx: ./pipex infile cmd1 cmd2 ... outfile\n    ./pipex here_doc LIMITER cmd cmd1 ... outfile\n"
+# define ERROR_INPUT "Invalid number of arguments\nEx: ./pipex infile cmd1 cmd2 ... outfile\n    ./pipex here_doc LIMITER cmd cmd1 ... outfile\n"
 # define ERROR_PIPE "Pipe"
 # define ERROR_FORK "Fork"
 # define ERROR_CMD "Command not found\n"

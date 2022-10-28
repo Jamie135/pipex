@@ -24,7 +24,7 @@
 
 # define ERROR_INFILE "Infile"
 # define ERROR_OUTFILE "Outfile"
-# define ERROR_INPUT "Invalid number of arguments.\nEx: ./pipex infile cmd1 cmd2 outfile\n"
+# define ERROR_INPUT "Invalid number of arguments\nEx: ./pipex infile cmd1 cmd2 outfile\n"
 # define ERROR_PIPE "Pipe"
 # define ERROR_FORK "Fork"
 # define ERROR_CMD "Command not found\n"
