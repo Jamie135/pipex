@@ -28,7 +28,7 @@ Ex: ./pipex infile cmd1 cmd2 ... outfile\n\
     ./pipex here_doc LIMITER cmd cmd1 ... outfile\n"
 # define ERROR_PIPE "Pipe"
 # define ERROR_FORK "Fork"
-# define ERROR_CMD "Command not found\n"
+# define ERROR_CMD "Command not found: "
 
 char	**create_path(char **envp);
 char	*find_path(char *cmd, char **envp);

@@ -28,7 +28,7 @@
 Ex: ./pipex infile cmd1 cmd2 outfile\n"
 # define ERROR_PIPE "Pipe"
 # define ERROR_FORK "Fork"
-# define ERROR_CMD "Command not found\n"
+# define ERROR_CMD "Command not found: "
 
 void	print_error(char *err);
 int		message_error(char *err);

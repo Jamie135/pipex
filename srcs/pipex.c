@@ -23,12 +23,14 @@ void	exe_cmd(char *argv, char **envp)
 	{
 		free_tabs(cmd);
 		message_error(ERROR_CMD);
+		ft_putendl_fd(argv, 2);
 	}
 	if (execve(path, cmd, envp) == -1)
 	{
 		free(path);
 		free_tabs(cmd);
 		message_error(ERROR_CMD);
+		ft_putendl_fd(argv, 2);
 	}
 }
 
