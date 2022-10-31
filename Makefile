@@ -19,7 +19,8 @@ CFLAGS = -Werror -Wall -Wextra
 RM = rm -rf
 
 SRCS = 	srcs/pipex.c\
-		srcs/utils.c
+		srcs/utils1.c\
+		srcs/utils2.c
 
 OBJS 	= ${SRCS:.c=.o}
 

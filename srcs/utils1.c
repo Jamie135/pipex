@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils1_bonus.c                                     :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pbureera <pbureera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/25 17:17:26 by pbureera          #+#    #+#             */
-/*   Updated: 2022/10/28 12:27:23 by pbureera         ###   ########.fr       */
+/*   Created: 2022/10/18 23:04:16 by pbureera          #+#    #+#             */
+/*   Updated: 2022/10/18 23:04:16 by pbureera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
+#include "pipex.h"
 
 char	**create_path(char **envp)
 {
@@ -66,43 +66,10 @@ void	exe_cmd(char *argv, char **envp)
 	cmd = ft_split(argv, ' ');
 	path = find_path(cmd[0], envp);
 	if (!path)
-	{
-		free_tabs(cmd);
-		message_error(ERROR_CMD);
-		ft_putendl_fd(argv, 2);
-	}
+		cmd_error(argv, cmd);
 	if (execve(path, cmd, envp) == -1)
 	{
 		free(path);
-		free_tabs(cmd);
-		message_error(ERROR_CMD);
-		ft_putendl_fd(argv, 2);
+		cmd_error(argv, cmd);
 	}
-}
-
-int	get_next_line(char **line)
-{
-	char	*buffer;
-	int		i;
-	int		r;
-	char	c;
-
-	i = 0;
-	r = 0;
-	buffer = (char *)malloc(10000);
-	if (!buffer)
-		return (-1);
-	r = read(0, &c, 1);
-	while (r && c != '\n' && c != '\0')
-	{
-		if (c != '\n' && c != '\0')
-			buffer[i] = c;
-		i++;
-		r = read(0, &c, 1);
-	}
-	buffer[i] = '\n';
-	buffer[++i] = '\0';
-	*line = buffer;
-	free(buffer);
-	return (r);
 }
