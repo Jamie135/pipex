@@ -32,6 +32,14 @@ void	cmd_error(char *argv, char **cmd)
 	exit(0);
 }
 
+void	close_wait(int fd1, int fd2, pid_t pid1, pid_t pid2)
+{
+	close(fd1);
+	close(fd2);
+	waitpid(pid1, NULL, 0);
+	waitpid(pid2, NULL, 0);
+}
+
 void	free_tabs(char **tab)
 {
 	size_t	i;

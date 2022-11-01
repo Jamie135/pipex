@@ -38,14 +38,6 @@ void	child2_process(char **argv, char **envp, int *fd)
 	exe_cmd(argv[3], envp);
 }
 
-void	close_wait(int fd1, int fd2, pid_t pid1, pid_t pid2)
-{
-	close(fd1);
-	close(fd2);
-	waitpid(pid1, NULL, 0);
-	waitpid(pid2, NULL, 0);
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	int		fd[2];
