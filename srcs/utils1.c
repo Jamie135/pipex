@@ -65,19 +65,40 @@ char	*bin_path(char *cmd)
 	return (NULL);
 }
 
+char	*bin_join(char *argv, char *to_join, char **cmd)
+{
+	char	*exec;
+
+	exec = ft_strjoin("/bin/", to_join);
+	if (access(exec, F_OK) == 0)
+		return (exec);
+	if (!exec)
+		cmd_error(argv, cmd);
+	return (NULL);
+}
+
 void	exe_cmd(char *argv, char **envp)
 {
 	char	**cmd;
+	int		len;
 	char	*path;
 
 	cmd = ft_split(argv, ' ');
-	path = find_path(cmd[0], envp);
-	if (!path)
+	len = 0;
+	while (envp[len])
+		len++;
+	if (len > 0)
 	{
-		path = bin_path(cmd[0]);
+		path = find_path(cmd[0], envp);
 		if (!path)
-			cmd_error(argv, cmd);
+		{
+			path = bin_path(cmd[0]);
+			if (!path)
+				cmd_error(argv, cmd);
+		}
 	}
+	else if (len == 0)
+		path = bin_join(argv, cmd[0], cmd);
 	if (execve(path, cmd, envp) == -1)
 	{
 		free(path);
