@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pbureera <pbureera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 23:04:16 by pbureera          #+#    #+#             */
-/*   Updated: 2022/10/18 23:04:16 by pbureera         ###   ########.fr       */
+/*   Updated: 2022/11/01 16:33:40 by pbureera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,13 @@ char	*find_path(char *cmd, char **envp)
 	return (0);
 }
 
+char	*bin_path(char *cmd)
+{
+	if (access(cmd, F_OK) == 0)
+		return (cmd);
+	return (NULL);
+}
+
 void	exe_cmd(char *argv, char **envp)
 {
 	char	**cmd;
@@ -66,7 +73,11 @@ void	exe_cmd(char *argv, char **envp)
 	cmd = ft_split(argv, ' ');
 	path = find_path(cmd[0], envp);
 	if (!path)
-		cmd_error(argv, cmd);
+	{
+		path = bin_path(cmd[0]);
+		if (!path)
+			cmd_error(argv, cmd);
+	}
 	if (execve(path, cmd, envp) == -1)
 	{
 		free(path);

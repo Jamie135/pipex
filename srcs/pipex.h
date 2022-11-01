@@ -36,6 +36,7 @@ void	cmd_error(char *argv, char **cmd);
 void	free_tabs(char **tab);
 char	**create_path(char **envp);
 char	*find_path(char *cmd, char **envp);
+char	*bin_path(char *cmd);
 void	exe_cmd(char *argv, char **envp);
 
 #endif

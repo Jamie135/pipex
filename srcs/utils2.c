@@ -6,7 +6,7 @@
 /*   By: pbureera <pbureera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 02:19:19 by pbureera          #+#    #+#             */
-/*   Updated: 2022/11/01 02:19:19 by pbureera         ###   ########.fr       */
+/*   Updated: 2022/11/01 16:01:21 by pbureera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	cmd_error(char *argv, char **cmd)
 	free_tabs(cmd);
 	message_error(ERROR_CMD);
 	ft_putendl_fd(argv, 2);
+	exit(0);
 }
 
 void	free_tabs(char **tab)
@@ -36,10 +37,18 @@ void	free_tabs(char **tab)
 	size_t	i;
 
 	i = 0;
-	while (tab[i])
+	if (tab)
 	{
-		free(tab[i]);
-		i++;
+		while (tab[i])
+		{
+			if (tab[i])
+			{
+				free(tab[i]);
+				tab[i] = NULL;
+			}
+			i++;
+		}
+		free(tab);
+		tab = NULL;
 	}
-	free(tab);
 }
