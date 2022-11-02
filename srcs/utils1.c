@@ -100,8 +100,5 @@ void	exe_cmd(char *argv, char **envp)
 	else if (len == 0)
 		path = bin_join(argv, cmd[0], cmd);
 	if (execve(path, cmd, envp) == -1)
-	{
-		//free(path);
 		cmd_error(argv, cmd);
-	}
 }
