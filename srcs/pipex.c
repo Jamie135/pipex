@@ -22,6 +22,8 @@ void	child1_process(char **argv, char **envp, int *fd)
 	dup2(fd[1], STDOUT_FILENO);
 	dup2(filein, STDIN_FILENO);
 	close(fd[0]);
+	close(filein);
+	close(fd[1]);
 	exe_cmd(argv[2], envp);
 }
 
@@ -35,6 +37,8 @@ void	child2_process(char **argv, char **envp, int *fd)
 	dup2(fd[0], STDIN_FILENO);
 	dup2(fileout, STDOUT_FILENO);
 	close(fd[1]);
+	close(fileout);
+	close(fd[0]);
 	exe_cmd(argv[3], envp);
 }
 

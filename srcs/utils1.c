@@ -6,7 +6,7 @@
 /*   By: pbureera <pbureera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 23:04:16 by pbureera          #+#    #+#             */
-/*   Updated: 2022/11/01 16:33:40 by pbureera         ###   ########.fr       */
+/*   Updated: 2022/11/02 16:55:59 by pbureera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void	exe_cmd(char *argv, char **envp)
 		path = bin_join(argv, cmd[0], cmd);
 	if (execve(path, cmd, envp) == -1)
 	{
-		free(path);
+		//free(path);
 		cmd_error(argv, cmd);
 	}
 }

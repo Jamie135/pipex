@@ -6,7 +6,7 @@
 /*   By: pbureera <pbureera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 02:19:19 by pbureera          #+#    #+#             */
-/*   Updated: 2022/11/01 16:01:21 by pbureera         ###   ########.fr       */
+/*   Updated: 2022/11/02 16:47:25 by pbureera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	cmd_error(char *argv, char **cmd)
 	free_tabs(cmd);
 	message_error(ERROR_CMD);
 	ft_putendl_fd(argv, 2);
-	exit(0);
+	exit(EXIT_FAILURE);
 }
 
 void	close_wait(int fd1, int fd2, pid_t pid1, pid_t pid2)
